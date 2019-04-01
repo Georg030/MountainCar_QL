@@ -23,7 +23,7 @@ wird er erreicht ist der Reward 1. Für meine Lösung habe ich allerdings eine a
 Q-Learning ist eine Technik des Reinforcement-Learning, dessen Ziel es ist eine Optimale Policy zu erlernen.
 Die optimale Policy soll immer die Action-Value Funktion bereitstellen, 
 die in anbetracht der darauf resultierenden States und Actions den höchsten Reward verspricht.
-Die Action-Value Funktion oder auch Q(a,s) Gibt hierbei an welche Aktion die beste im gegenwärtigen Status ist.
-Die Policy ist hierbei ein Neuronales Netz, dessen Weights trainiert werden, um bei States als Input die optimalen Q(a,s) als Output zu erhalten. 
+Die Action-Value Funktion oder auch Q(a,s) gibt hierbei einen Q-Value aus, welcher der höchste Wert der möglichen Aktionen ist.
+Die Policy ist hierbei ein Neuronales Netz, dessen Weights trainiert werden, um bei States als Input die optimalen Q(a,s) bzw Q-Value als Output zu erhalten. 
 
 
