@@ -96,7 +96,7 @@ run_durations = []
 
 # turn Experience Replay here on or off
 #######################################
-experience_replay = False ##############
+Experience_Replay = True ##############
 #######################################
 
 for run in trange(RUNS):
@@ -118,7 +118,7 @@ for run in trange(RUNS):
             action = action.item()
 
         # Step forward and receive next state and reward
-        state_1, _, done, _ = env.step(action)
+        state_1, reward, done, _ = env.step(action)
 
         # Adjust reward based on car position
         reward = state_1[0] + 0.5
@@ -126,7 +126,7 @@ for run in trange(RUNS):
         if state_1[0] >= 0.5:
             reward += 1
 
-        if experience_replay:
+        if Experience_Replay:
             # store transition in replay memory
             R_MEMORY.push(torch.tensor(state_0), action, reward, state_1)
             optimize_with_ER()
@@ -154,10 +154,12 @@ for run in trange(RUNS):
 
     if run % UPDATE_TARGET_N == 0:
         target_network.load_state_dict(p_network.state_dict())
-        print("hi")
 
-    print('successful runs: {:d} - {:.4f}%'.format(successes, successes / RUNS * 100))
-    print("steps", last_nrsteps)
+        print('successful runs: {:d} - {:.4f}%'.format(successes, successes / RUNS * 100))
+        print("steps", last_nrsteps)
+
+
+
 
 
 
