@@ -14,18 +14,23 @@ from ReplayMemory import ReplayMemory
 
 
 def optimize(Q_0):
-    # action-value function for state_1
+    # get action-value function for state + 1
     Q_1 = p_network(Variable(torch.from_numpy(state_1).type(torch.FloatTensor)))
+    # take action with max Value of Q_1
     maxQ_1, _ = torch.max(Q_1, -1)
 
-    # Create target Q value for training the policy
+    # Q-Target as copy of Q_O (Q_0 is the action value function of state 0)
     target_Q = Variable(Q_0.clone())
+
+    #change max value action to satisfy Bellman Equation
+    # -> Muliply the highest Action Value of Q_1 with Gamma and add received reward for current state
     target_Q[action] = reward + torch.mul(maxQ_1.detach(), GAMMA)
 
-    # Calculate loss
+    # Calculate loss between Q_0 and Q-Target (Mean Squarred Error)
     loss = loss_function(Q_0, target_Q)
 
-    # train model
+    # train model (backpropagation with loss)
+    # so that Q_0 approximates Q-Target
     p_network.zero_grad()
     loss.backward()
     optimizer.step()
