@@ -4,14 +4,16 @@ import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
 import torch.optim as optim
+import pandas as pd
 from torch.autograd import Variable
 from tqdm import tqdm, trange
+
 from NN import NN
 from ReplayMemory import ReplayMemory
-import pandas as pd
 
 
-def optimize():
+
+def optimize(Q_0):
     # action-value function for state_1
     Q_1 = p_network(Variable(torch.from_numpy(state_1).type(torch.FloatTensor)))
     maxQ_1, _ = torch.max(Q_1, -1)
@@ -65,7 +67,7 @@ torch.manual_seed(1)
 
 UPDATE_TARGET_N = 10
 BATCH_SIZE = 128
-RUNS = 2000
+RUNS = 1000
 STEPS = 500
 R_MEMORY = ReplayMemory(10000)
 MIN_EPSILON = 0.04
@@ -89,40 +91,37 @@ optimizer = optim.SGD(p_network.parameters(), lr=l_r)
 # Scheduler will adjust learning rate after every run with the factor gamma
 scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.9)
 
-number_steps = []
+steps_history = []
 last_nrsteps = 0
 run_durations = []
 
 
 # turn Experience Replay here on or off
 #######################################
-Experience_Replay = True ##############
+Experience_Replay = False ##############
 #######################################
 
 for run in trange(RUNS):
-    run_reward = 0
-    run_loss = 0
     state_0 = env.reset()
 
     for step in range(STEPS):
-
-        # get action-value function state_0
+        # get action-value function of state_0
         Q_0 = p_network(Variable(torch.from_numpy(state_0).type(torch.FloatTensor)))
 
-        # Choose random action with epsilon probability
+        # epsilon probability of choosing a random action
         if np.random.rand(1) < epsilon:
             action = np.random.randint(0, 3)
         else:
             # choose max value action
             _, action = torch.max(Q_0, -1)  # returns values, indices
             action = action.item()
+        # make next step and receive next state and reward, done true when successfull
+        state_1, _, done, _ = env.step(action)
 
-        # Step forward and receive next state and reward
-        state_1, reward, done, _ = env.step(action)
-
-        # Adjust reward based on car position
+        # Rewardfunction:
+        # get reward based on car position
         reward = state_1[0] + 0.5
-        # Adjust reward for task completion
+        # increase reward for task completion
         if state_1[0] >= 0.5:
             reward += 1
 
@@ -131,8 +130,7 @@ for run in trange(RUNS):
             R_MEMORY.push(torch.tensor(state_0), action, reward, state_1)
             optimize_with_ER()
 
-        else: optimize()
-
+        else: optimize(Q_0)
 
         if done or step + 1 == STEPS:
             # if successful
@@ -143,10 +141,9 @@ for run in trange(RUNS):
                     epsilon *= .99
                 # Adjust learning rate
                 scheduler.step()
-            # gater history
+            # gather history
             position.append(state_1[0])
-            number_steps.append(step + 1)
-            last_nrsteps = step + 1
+            steps_history.append(step + 1)
             break
         else:
             state_0 = state_1
@@ -156,7 +153,7 @@ for run in trange(RUNS):
         target_network.load_state_dict(p_network.state_dict())
 
         print('successful runs: {:d} - {:.4f}%'.format(successes, successes / RUNS * 100))
-        print("steps", last_nrsteps)
+        #print("steps", steps_history[-1)
 
 
 
@@ -165,8 +162,8 @@ for run in trange(RUNS):
 
 
 
-print("average steps for last 200 runs",np.sum(number_steps[-200:])/200)
-print("average steps for last 400 runs",np.sum(number_steps[-400:])/400)
+print("average steps for last 200 runs",np.sum(steps_history[-200:])/200)
+print("average steps for last 400 runs",np.sum(steps_history[-400:])/400)
 env.close()
 
 # plt.figure(2, figsize=[10,5])
@@ -183,7 +180,7 @@ env.close()
 
 
 plt.figure(2, figsize=[10,5])
-p = pd.Series(number_steps)
+p = pd.Series(steps_history)
 ma = p.rolling(100).mean()
 plt.plot(p, alpha=0.8)
 plt.plot(ma)

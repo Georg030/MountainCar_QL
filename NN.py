@@ -12,6 +12,7 @@ class NN (nn.Module):
         # fully connected layer
         self.fc1 = nn.Linear(self.states_size, self.hidden1, bias=False)
         self.fc2 = nn.Linear(self.hidden1, self.actions_size, bias=False)
+
         #xavier weight initialisation: worse performance with optimal reward function
         # torch.nn.init.xavier_uniform(self.fc1.weight)
         # torch.nn.init.xavier_uniform(self.fc2.weight)
