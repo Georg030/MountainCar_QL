@@ -37,7 +37,7 @@ Kern der Fragestellung ist die Implementierung von Q-Learning und der Erweiterun
 ##### Netzwerk
 Das Netzwerk ist ein einfaches Fully-Connected Network mit einen einzigen Hiddenlayer mit 100 Neuronen. Es gibt zwei Input Neuronen für die Observierbaren States (Position/Velocity) und drei Output Neuronen für die möglichen Aktionen (links, nichts tun,rechts). 
 Die weights sind mit der Default Standartverteilung von Torch initialisiert. Ich habe auch eine Initialisierung mit Xavier getestet, durch diese hat das Netzwerk zwar früher konvergiert aber final schlechtere Resultate erziehlt.
-```
+```python
 class NN (nn.Module):
     def __init__(self):
         super(NN, self).__init__()
@@ -61,5 +61,12 @@ class NN (nn.Module):
         return model(input)
 
  ```
+
+##### Q-Learning Algorithmus
+
+Die Interaktion mit der Environment stellt sich Episodisch dar. Wobei eine Episode in meiner Implementation aus Maximal 500 Schritten/Steps besteht. Die Environment wird resettet wenn es das Fahrzeug zum Ziel schafft oder die 500 Steps erreicht wurden, was dazu führt das das Fahrzeug wieder auf die Startposition zurückkehrt und die nächste Episode/Run beginnt. Jeder Schritt beginnt mit der Obversvation der Environment, man erhält also den aktuellen Status mit Position. Die Policy also das Netzwerk bekommt den State als Input und gibt daraufhin eine Q-Value Funktion(Q_0) zurück, ein Array mit drei Werten die die Values der drei möglichen Aktionen sind.  
+<br>
+
+Der Reward ist bei Default -1 für jeden Step der das Ziel nicht erreicht hat und +1 wenn das Ziel erreicht wurde. Ich habe eine eine eigene Rewardfunktion verwendet die die aktuelle Position berücksichtigt, da bei einem Reward von gleichbleibenden -1 kein lernen Stattfindet bis das Ziel durch Zufall erreicht wurde, was nur im seltenen Fall gelingt.
 
 
