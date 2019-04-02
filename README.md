@@ -99,6 +99,7 @@ Diese hat sich bereits bei einer Implementierung erwiesen
 #### Optimierung mit Q-Learning
 
 Jetzt wissen wir nach welcher Regel in jedem Step die nächste Aktion gewählt wird. Es muss allerdings die Policy (NN),so optimiert werden, dass sie Action-Values ausgibt die in etwa den Reward des nächsten und auch zukünftigen States bis zum Erfolg, entsprechen.   
-
+<br>
+![alt text](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/Bellman Equation.png)
 
 
