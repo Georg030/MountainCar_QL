@@ -19,14 +19,17 @@ wird er erreicht ist der Reward 1. Für meine Lösung habe ich allerdings eine a
 ![alt text](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/Observation.png)
 
 
-### Q-Learning und Experience Replay
+### Q-Learning und die Fragestellung
 Q-Learning ist eine Technik des Reinforcement-Learning, dessen Ziel es ist eine Optimale Policy zu erlernen.
 Die optimale Policy soll immer die Action-Value Funktion bereitstellen, 
 die in anbetracht der darauf resultierenden States und Actions den höchsten Reward verspricht.
 Die Action-Value Funktion oder auch Q(a,s) gibt hierbei einen Q-Value aus,
 welcher dem Value/Reward einer durchgeführten Aktion entpricht 
 Die Policy ist hierbei ein Neuronales Netz, dessen Weights trainiert werden, um bei resultierenden States als Input die optimalen Q(a,s), bzw. die Aktionen mit maximalen Q-Values als Output zu erhalten. 
+<b>
+Um das Mountain Car Problem zu lösen werde ich das Q-Learning mittels der Implementierung der Bellmann Equation umsetzen. Anschließend will ich Experience Replay als Q-Learning Erweiterung implementieren und das standart Q-Learning, mit dem mit Experience Replay erweiterten, gegenüberstellen. Es stellen sich jetzt natürlich die Fragen was Bellmann Equation und Experience Replay beudeuten, dazu werde ich bei der Implementierung genauer eingehen. 
+  
 
+### Implementierung
 
-
-
+Für die Implementierung habe ich PyTorch, eine Open-Source 
