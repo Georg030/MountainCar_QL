@@ -91,7 +91,7 @@ for run in trange(RUNS):
         if state_1[0] >= 0.5:
             reward += 1
 ```
-Der Reward ist bei Default -1 für jeden Step der das Ziel nicht erreicht hat und +1 wenn das Ziel erreicht wurde. Ich habe eine eine Rewardfunktion verwendet die die aktuelle Position berücksichtigt, da bei einem Reward von gleichbleibenden -1 kein lernen Stattfindet bis das Ziel durch Zufall erreicht wurde, was nur im seltenen Fall gelingt. Diese hat sich bei Implementationen die sich intensiver mit der Thematik befasst haben als optimale Rewardfunktion herrausgestellt.
+Der Reward ist bei Default -1 für jeden Step der das Ziel nicht erreicht hat und +1 wenn das Ziel erreicht wurde. Ich habe eine eine Rewardfunktion verwendet die die aktuelle Position berücksichtigt, da bei einem Reward von gleichbleibenden -1 kein lernen Stattfindet bis das Ziel durch Zufall erreicht wurde, was nur im seltenen Fall gelingt. Diese hat sich bei Implementationen die sich intensiver mit der Thematik befasst haben als optimale Rewardfunktion herrausgestellt (https://medium.com/@ts1829/solving-mountain-car-with-q-learning-b77bf71b1de2#5abe).
 
 #### Optimierung mit Q-Learning
 
