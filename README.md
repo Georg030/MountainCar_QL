@@ -32,4 +32,5 @@ Um das Mountain Car Problem zu lösen werde ich das Q-Learning mittels der Imple
 
 ### Implementierung
 
-Für die Implementierung habe ich PyTorch, eine Open-Source 
+Für die Implementierung habe ich PyTorch genutzt, eine Open-Source Machine Learning Bibliothek für Python.
+Kern der Fragestellung ist die Implementierung von Q-Learning und der Erweiterung mit Replay Experience. Hpyerparameter- und Netzwerktuning habe ich nur bis zu dem Punkt vorgenommen, bei dem beide Implementierungen unter gleichen Bedingungen funktionieren. 
