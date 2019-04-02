@@ -98,8 +98,32 @@ Diese hat sich bereits bei einer Implementierung erwiesen
 
 #### Optimierung mit Q-Learning
 
-Jetzt wissen wir nach welcher Regel in jedem Step die nächste Aktion gewählt wird. Es muss allerdings die Policy (NN),so optimiert werden, dass sie Action-Values ausgibt die in etwa den Reward des nächsten und auch zukünftigen States bis zum Erfolg, entsprechen.   
+Jetzt wissen wir nach welcher Regel in jedem Step die nächste Aktion gewählt wird. Als nächstes muss die Bellman Equation erfüllt werden. Denn die besagt, dass die Policy (NN) optimal werden muss, also Action-Values ausgibt die den Reward und auch zukünftigen States (mit einen Rauschen Gamma) bis zum Erfolg, entsprechen. Ist dies gegeben wird zu jedem State das auswählen der Aktion mit maximalen Value schließlich zum Erfolg also dem höchst möglichen Reward führen, was in unseren Fall der Gipfel ist.
 <br>
-![alt text](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/Bellman Equation.png)
+![screenshot](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/Bellman Equation.png)
 <br>
+Die Umsetzung lässt sich einfacher Anhand meiner Implementierung und Kommentare nachvollziehen:
+```python
+def optimize(Q_0):
+    # get action-value function for state + 1
+    Q_1 = p_network(Variable(torch.from_numpy(state_1).type(torch.FloatTensor)))
+    # take action with max Value of Q_1
+    maxQ_1, _ = torch.max(Q_1, -1)
 
+    # Q-Target as copy of Q_O (Q_0 is the action value function of state 0)
+    target_Q = Variable(Q_0.clone())
+    
+    #change max value action to satisfy Bellman Equation
+    # -> Muliply the highest Action Value of Q_1 with Gamma and add received reward for current state
+    target_Q[action] = reward + torch.mul(maxQ_1.detach(), GAMMA)
+
+    # Calculate loss between Q_0 and Q-Target (Mean Squarred Error)
+    loss = loss_function(Q_0, target_Q)
+
+    # train model (backpropagation with loss) 
+    # so that Q_0 approximates Q-Target
+    p_network.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+```
