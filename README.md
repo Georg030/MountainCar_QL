@@ -95,7 +95,10 @@ Der Reward ist bei Default -1 für jeden Step der das Ziel nicht erreicht hat un
 Diese hat sich bereits bei einer Implementierung erwiesen
 [(hier der link)](https://medium.com/@ts1829/solving-mountain-car-with-q-learning-b77bf71b1de2#5abe).
 
+
 #### Optimierung mit Q-Learning
+
+Jetzt wissen wir nach welcher Regel in jedem Step die nächste Aktion gewählt wird. Es muss allerdings die Policy (NN),so optimiert werden, dass sie Action-Values ausgibt die in etwa den Reward des nächsten und auch zukünftigen States bis zum Erfolg, entsprechen.   
 
 
 
