@@ -1,6 +1,6 @@
 # MountainCar_QL
 
-##Problemstellung - MountainCar
+## Problemstellung - MountainCar
 MountainCar ist ein Reinforcement Learning Problem, welches in der PhD Thesis von Andrew Moore entstanden ist.
 Die Lösung des Problems ist simpel: Ein Auto muss von einen Tal aus einen Hügel hinnauffahren.
 Da Schwerkraft auf das Auto wirkt und der Motor des Fahrzeugs eine zu geringe Kraft aufbringt, kann das Fahrzeug allerdings nicht einfach den Hang hinauf beschleunigen.
@@ -62,11 +62,32 @@ class NN (nn.Module):
 
  ```
 
-##### Q-Learning Algorithmus
+##### Interaktion mit der Environment
 
-Die Interaktion mit der Environment stellt sich Episodisch dar. Wobei eine Episode in meiner Implementation aus Maximal 500 Schritten/Steps besteht. Die Environment wird resettet wenn es das Fahrzeug zum Ziel schafft oder die 500 Steps erreicht wurden, was dazu führt das das Fahrzeug wieder auf die Startposition zurückkehrt und die nächste Episode/Run beginnt. Jeder Schritt beginnt mit der Obversvation der Environment, man erhält also den aktuellen Status mit Position. Die Policy also das Netzwerk bekommt den State als Input und gibt daraufhin eine Q-Value Funktion(Q_0) zurück, ein Array mit drei Werten die die Values der drei möglichen Aktionen sind.  
+Die Interaktion mit der Environment stellt sich Episodisch dar. Wobei eine Episode in meiner Implementation aus Maximal 500 Schritten/Steps besteht. Die Environment wird resettet wenn es das Fahrzeug zum Ziel schafft oder die 500 Steps erreicht wurden, was dazu führt das das Fahrzeug wieder auf die Startposition zurückkehrt und die nächste Episode/Run beginnt. Jeder Schritt beginnt mit der Obversvation der Environment, man erhält also den aktuellen Status mit Position. Die Policy also das Netzwerk bekommt den State als Input und gibt daraufhin eine Q-Value Funktion(Q_0) zurück, ein Array mit drei Werten die die Values der drei möglichen Aktionen sind. Ein logischer Schritt wäre es nun die Aktion zu wählen die den höchsten Value/Reward verspricht(max(Q_0)), was sich auch Exploitation also Ausbeutung nennt. Da wir aber noch keine optimale Policy haben und die Values nicht den tatsächlichen Rewards entsprechen, ist es notwendig das für die Entdeckung möglicher höherer Rewards ein Teil der Aktionen Zufällig gewählt wird. Dieser Teil nennt sich Exploration (Erkundschaften). Es gibt also ein Abwägen zwischen Exploration und Exploitation welches durch den Parameter Epsilon bestimmt wird. Die Beeinflussung der Exploitation durch Epsilon wird Epsilon-Greedy (Greedy für Gier) genannt. In meiner Implementierung beträgt Epsilon den Wert 0.4 und besagt, dass 40% der Aktionen zufällig gewählt werden also der Exploration dienen. Der Wert von Epsilon sinkt allerdings nach jeder Erfolgreichen Episode. 
 <br>
+```python
+for run in trange(RUNS):
+    state_0 = env.reset()
 
+    for step in range(STEPS):
+        # get action-value function state_0
+        Q_0 = p_network(Variable(torch.from_numpy(state_0).type(torch.FloatTensor)))
+        # Choose random action with epsilon probability
+        if np.random.rand(1) < epsilon:
+            action = np.random.randint(0, 3)
+        else:
+            # choose max value action
+            _, action = torch.max(Q_0, -1)  # returns values, indices
+            action = action.item()
+        # Step forward and receive next state and reward
+        state_1, reward, done, _ = env.step(action)
+        # Adjust reward based on car position
+        reward = state_1[0] + 0.5
+        # Adjust reward for task completion
+        if state_1[0] >= 0.5:
+            reward += 1
+```
 Der Reward ist bei Default -1 für jeden Step der das Ziel nicht erreicht hat und +1 wenn das Ziel erreicht wurde. Ich habe eine eine eigene Rewardfunktion verwendet die die aktuelle Position berücksichtigt, da bei einem Reward von gleichbleibenden -1 kein lernen Stattfindet bis das Ziel durch Zufall erreicht wurde, was nur im seltenen Fall gelingt.
 
 
