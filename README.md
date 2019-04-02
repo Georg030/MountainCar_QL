@@ -100,7 +100,7 @@ Diese hat sich bereits bei einer Implementierung erwiesen
 
 Jetzt wissen wir nach welcher Regel in jedem Step die nächste Aktion gewählt wird. Als nächstes muss die Bellman Equation erfüllt werden. Denn die besagt, dass die Policy (NN) optimal werden muss, also Action-Values ausgibt die den Reward und auch zukünftigen States (mit einen Rauschen Gamma) bis zum Erfolg, entsprechen. Ist dies gegeben wird zu jedem State das auswählen der Aktion mit maximalen Value schließlich zum Erfolg also dem höchst möglichen Reward führen, was in unseren Fall der Gipfel ist.
 <br>
-![screenshot](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/Bellman Equation.png)
+![screenshot](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/BellmanEquation.png)
 <br>
 Die Umsetzung lässt sich einfacher Anhand meiner Implementierung und Kommentare nachvollziehen:
 ```python
