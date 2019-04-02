@@ -71,23 +71,29 @@ for run in trange(RUNS):
     state_0 = env.reset()
 
     for step in range(STEPS):
-        # get action-value function state_0
+        # get action-value function of state_0
         Q_0 = p_network(Variable(torch.from_numpy(state_0).type(torch.FloatTensor)))
-        # Choose random action with epsilon probability
+
+        # epsilon probability of choosing a random action
         if np.random.rand(1) < epsilon:
             action = np.random.randint(0, 3)
         else:
             # choose max value action
             _, action = torch.max(Q_0, -1)  # returns values, indices
             action = action.item()
-        # Step forward and receive next state and reward
-        state_1, reward, done, _ = env.step(action)
-        # Adjust reward based on car position
+        # make next step and receive next state and reward, done true when successfull
+        state_1, _, done, _ = env.step(action)
+        
+        # Rewardfunction: 
+        # get reward based on car position
         reward = state_1[0] + 0.5
-        # Adjust reward for task completion
+        # increase reward for task completion
         if state_1[0] >= 0.5:
             reward += 1
 ```
-Der Reward ist bei Default -1 für jeden Step der das Ziel nicht erreicht hat und +1 wenn das Ziel erreicht wurde. Ich habe eine eine eigene Rewardfunktion verwendet die die aktuelle Position berücksichtigt, da bei einem Reward von gleichbleibenden -1 kein lernen Stattfindet bis das Ziel durch Zufall erreicht wurde, was nur im seltenen Fall gelingt.
+Der Reward ist bei Default -1 für jeden Step der das Ziel nicht erreicht hat und +1 wenn das Ziel erreicht wurde. Ich habe eine eine Rewardfunktion verwendet die die aktuelle Position berücksichtigt, da bei einem Reward von gleichbleibenden -1 kein lernen Stattfindet bis das Ziel durch Zufall erreicht wurde, was nur im seltenen Fall gelingt. Diese hat sich bei Implementationen die sich intensiver mit der Thematik befasst haben als optimale Rewardfunktion herrausgestellt.
+
+#### Optimierung mit Q-Learning
+
 
 
