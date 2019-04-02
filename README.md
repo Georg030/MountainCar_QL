@@ -31,9 +31,35 @@ Für die Lösung des MountainCar Problems werde ich das Q-Learning mittels der I
 
 
 ## Implementierung
-Für die Implementierung habe ich PyTorch genutzt, eine Open-Source Machine Learning Bibliothek für Python.
-Kern der Fragestellung ist die Implementierung von Q-Learning und der Erweiterung mit Replay Experience. Hpyerparameter- und Netzwerktuning habe ich nur bis zu dem Punkt vorgenommen, bei dem beide Implementierungen unter gleichen Bedingungen funktionieren. 
+Für die Implementierung habe ich PyToworse performance with optimal reward functionrch genutzt, eine Open-Source Machine Learning Bibliothek für Python.
+Kern der Fragestellung ist die Implementierung von Q-Learning und der Erweiterung mit Replay Experience. Hpyerparameter- und Netzwerktuning habe ich nur bis zu dem Punkt vorgenommen, bei dem beide Implementierungen unter gleichen Bedingungen funktionieren. Da das Tuning nicht Schwerpunkt dieser Arbeit ist werde ich wenn nur geringfügig darauf eingehen.
+
+##### Netzwerk
+Das Netzwerk ist ein einfaches Fully-Connected Network mit einen einzigen Hiddenlayer mit 100 Neuronen. Es gibt zwei Input Neuronen für die Observierbaren States (Position/Velocity) und drei Output Neuronen für die möglichen Aktionen (links, nichts tun,rechts). 
+Die weights sind mit der Default Standartverteilung von Torch initialisiert. Ich habe auch eine Initialisierung mit Xavier getestet, durch diese hat das Netzwerk zwar früher konvergiert aber final schlechtere Resultate erziehlt.
+```
+class NN (nn.Module):
+    def __init__(self):
+        super(NN, self).__init__()
+        self.actions_size = 3
+        self.states_size = 2
+        self.hidden1 = 100
+        # fully connected layer
+        self.fc1 = nn.Linear(self.states_size, self.hidden1, bias=False)
+        self.fc2 = nn.Linear(self.hidden1, self.actions_size, bias=False)
+
+        #xavier weight initialisation
+        # torch.nn.init.xavier_uniform(self.fc1.weight)
+        # torch.nn.init.xavier_uniform(self.fc2.weight)
 
 
+    def forward (self, input):
+        model = torch.nn.Sequential (
+            self.fc1,
+            self.fc2
+        )
+        return model(input)
+
+ ```
 
 
