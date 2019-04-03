@@ -161,10 +161,12 @@ def optimize_with_ER():
         loss.backward()
         optimizer.step()
 ```
-## Vorteile von Experience Replay 
+### Vorteile von Experience Replay 
 Das lernen von aufeinanderfolgenden Aktionen ist durch die hohe Horrelation problematisch und führt zu einen uneffizienten Lernen. Außerdem können dabei, die bereits erwähnten, "Bad Feedback Loops" entstehen. 
 <br>
 Indem die Erfahrungen beibehalten werden verhindern wir, dass das Netzwerk nur davon lernt, was es unmittelbar in der Umgebung tut. Es ermöglicht von einer Array von Erfahrungen zu lernen und dies bei jedem Schritt, wohingegen das standart Q-Learning nur von einer Aktion lernt. Experience Replay ist deshalb effizienter als das Einfache Q-Learning und kann auch mit weniger oder sich wiederholenden Daten besser Lernen. Die Gefahr von Bad Feedback Loops wird Aufgrund der geringen Korrelation der Erfahrungen verringert. Experience Replay führt ausserdem zu einer besseren Konvergenz und erziehlt daher bessere Ergebnisse. 
+
+## Ergebnis
 
 
 
