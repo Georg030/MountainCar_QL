@@ -168,6 +168,7 @@ Indem die Erfahrungen beibehalten werden verhindern wir, dass das Netzwerk nur d
 
 ## Ergebnis
 
+Anhand der Grafiken lässt sich erkennen, dass das Q-Learning mit Replay Experience wesentlich bessere Ergebnisse erziehlt. Die gennanten Vorteile scheinen sich in den Ergebnissen wieder zu spiegeln. 
 
 
 
