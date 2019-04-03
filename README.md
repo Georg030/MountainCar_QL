@@ -1,4 +1,3 @@
-# MountainCar_QL
 
 ## Problemstellung - MountainCar
 MountainCar ist ein Reinforcement Learning Problem, welches in der PhD Thesis von Andrew Moore entstanden ist.
