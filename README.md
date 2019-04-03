@@ -131,4 +131,32 @@ Durch Q-Learning entsteht eine sehr hohe korrelation zwischen den aufeinanderfol
 
 #### Experience Replay
 Experience Replay (ER) ist eine Erweiterung des Q-Learnings. Hierbei wird wie vorher auch die Aktion mit Epsilon-Greedy gewählt. Allerdings wird die Experience also die Erfahrung/Experience (State, Action, Reward, State +1) in jedem Schritt gespeichert. Das heißt, für gegebenen State gewählte Action erhält man den Reward und den nächsten State, welche in einen Replay Memory gespeichert werden. 
-Um die Policy zu trainieren wird bei jedem Schritt ein Batch (hier Größe von 128)  einer zufälligen Teilmenge aus dem Replay Memory genommen. Nun berechnet man für jede Experience wie vorher das Q-Target und den Loss zwischen Q-Target und Q-0. Besonders ist, dass es diesmal zwei Netwerke gibt, zusätzlich zu dem Policy-Netzwerk gibt es ein Target-Netzwerk, welches den Q-Value des States + 1 berechnet. Das Target-Netzt ist eingefrohren und übernimmt in Abstand von mehreren Schritten (hier 10) die Weights des Policy-Netzwerks. 
+Um die Policy zu trainieren wird bei jedem Schritt ein Batch (hier Größe von 128)  einer zufälligen Teilmenge aus dem Replay Memory genommen. Nun berechnet man für jede Experience wie vorher das Q-Target und den Loss zwischen Q-Target und Q-0. Anzumerken ist, dass es diesmal zwei Netwerke gibt. Zusätzlich zu dem Policy-Netzwerk gibt es ein Target-Netzwerk, welches den Q-Value des States + 1 berechnet. Das Target-Netz ist eingefrohren und übernimmt in Abstand von mehreren Schritten (hier 10) die Weights des Policy-Netzwerks. Dies gibt den Algroithmus eine höhere Stabilität. 
+```python
+def optimize_with_ER():
+    if len(R_MEMORY) > BATCH_SIZE:
+        # takes batch from Memory
+        transitions = R_MEMORY.sample(BATCH_SIZE)
+        batch = R_MEMORY.Transition(*zip(*transitions))
+        states_0 = torch.stack(batch.state)
+        actions_0 = torch.tensor(batch.action).view(BATCH_SIZE, 1)
+        rewards = torch.tensor(batch.reward)
+        states_1 = torch.tensor(batch.next_state)
+
+        # action-values for the states_0
+        # get Q-Values according to taken actions
+        max_Qs_0 = p_network(states_0.float()).gather(1, actions_0)
+        # get Q-Values from next state + 1 from from target-network
+        max_Qs_1 = target_network(states_1.float()).max(1)[0]
+
+        # Compute the expected Q values
+        target_Qs = rewards + (max_Qs_1 * GAMMA)
+        # calculate loss
+        loss = loss_function(max_Qs_0, target_Qs.unsqueeze(1))
+
+        #otimize network with brackpropagation
+        p_network.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+```
