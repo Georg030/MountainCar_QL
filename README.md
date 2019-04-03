@@ -33,7 +33,7 @@ Für die Lösung des MountainCar Problems werde ich das Q-Learning mittels der I
 Für die Implementierung habe ich PyToworse performance with optimal reward functionrch genutzt, eine Open-Source Machine Learning Bibliothek für Python.
 Kern der Fragestellung ist die Implementierung von Q-Learning und der Erweiterung mit Replay Experience. Hpyerparameter- und Netzwerktuning habe ich nur bis zu dem Punkt vorgenommen, bei dem beide Implementierungen unter gleichen Bedingungen funktionieren. Da das Tuning nicht Schwerpunkt dieser Arbeit ist werde ich wenn nur geringfügig darauf eingehen.
 
-##### Netzwerk
+#### Netzwerk
 Das Netzwerk ist ein einfaches Fully-Connected Network mit einen einzigen Hiddenlayer mit 100 Neuronen. Es gibt zwei Input Neuronen für die Observierbaren States (Position/Velocity) und drei Output Neuronen für die möglichen Aktionen (links, nichts tun,rechts). 
 Die weights sind mit der Default Standartverteilung von Torch initialisiert. Ich habe auch eine Initialisierung mit Xavier getestet, durch diese hat das Netzwerk zwar früher konvergiert aber final schlechtere Resultate erziehlt.
 ```python
@@ -61,7 +61,7 @@ class NN (nn.Module):
 
  ```
 
-##### Interaktion mit der Environment
+#### Interaktion mit der Environment
 
 Die Interaktion mit der Environment stellt sich Episodisch dar. Wobei eine Episode in meiner Implementation aus Maximal 500 Schritten/Steps besteht. Die Environment wird resettet wenn es das Fahrzeug zum Ziel schafft oder die 500 Steps erreicht wurden, was dazu führt das das Fahrzeug wieder auf die Startposition zurückkehrt und die nächste Episode/Run beginnt. Jeder Schritt beginnt mit der Obversvation der Environment, man erhält also den aktuellen Status mit Position. Die Policy also das Netzwerk bekommt den State als Input und gibt daraufhin eine Q-Value Funktion(Q_0) zurück, ein Array mit drei Werten die die Values der drei möglichen Aktionen sind. Ein logischer Schritt wäre es nun die Aktion zu wählen die den höchsten Value/Reward verspricht(max(Q_0)), was sich auch Exploitation also Ausbeutung nennt. Da wir aber noch keine optimale Policy haben und die Values nicht den tatsächlichen Rewards entsprechen, ist es notwendig das für die Entdeckung möglicher höherer Rewards ein Teil der Aktionen Zufällig gewählt wird. Dieser Teil nennt sich Exploration (Erkundschaften). Es gibt also ein Abwägen zwischen Exploration und Exploitation welches durch den Parameter Epsilon bestimmt wird. Die Beeinflussung der Exploitation durch Epsilon wird Epsilon-Greedy (Greedy für Gier) genannt. In meiner Implementierung beträgt Epsilon den Wert 0.4 und besagt, dass 40% der Aktionen zufällig gewählt werden also der Exploration dienen. Der Wert von Epsilon sinkt allerdings nach jeder Erfolgreichen Episode. 
 <br>
@@ -95,7 +95,7 @@ Diese hat sich bereits bei einer Implementierung erwiesen
 [(hier der link)](https://medium.com/@ts1829/solving-mountain-car-with-q-learning-b77bf71b1de2#5abe).
 
 
-#### Optimierung mit Q-Learning
+### Optimierung mit Q-Learning
 
 Jetzt wissen wir nach welcher Regel in jedem Step die nächste Aktion gewählt wird. Als nächstes muss die Bellman Equation erfüllt werden.
 <br>
@@ -132,7 +132,7 @@ def optimize(Q_0):
 ```
 Durch Q-Learning entsteht eine sehr hohe korrelation der aufeinanderfolgenden Aktionen, dies führt zu einen ineffizienten lernen. Der Gegenwärtige State bestimmt hierbei den nächsten wenn wir immer den maximalen Value folgen. Ist bei einen nicht optimalen Netzwerk die maximale Aktion immer "nichts tun", was dazu führen kann das man in einen schlechten Feedback Schleife hängenbleibt (Bad Feedback Loop).
 
-#### Experience Replay
+### Experience Replay
 Experience Replay (ER) ist eine Erweiterung des Q-Learnings. Hierbei wird wie vorher auch die Aktion mit Epsilon-Greedy gewählt. Allerdings wird die Experience also die Erfahrung/Experience (State, Action, Reward, State +1) in jedem Schritt gespeichert. Das heißt, für gegebenen State gewählte Action erhält man den Reward und den nächsten State, welche in einen Replay Memory gespeichert werden. 
 Um die Policy zu trainieren wird bei jedem Schritt ein Batch (hier Größe von 128)  einer zufälligen Teilmenge aus dem Replay Memory genommen. Nun berechnet man für jede Experience wie vorher das Q-Target und den Loss zwischen Q-Target und Q-0. Anzumerken ist, dass es diesmal zwei Netwerke gibt. Zusätzlich zu dem Policy-Netzwerk gibt es ein Target-Netzwerk, welches den Q-Value des States + 1 berechnet. Das Target-Netz ist eingefrohren und übernimmt in Abstand von mehreren Schritten (hier 10) die Weights des Policy-Netzwerks. Dies gibt den Algroithmus eine höhere Stabilität. 
 ```python
