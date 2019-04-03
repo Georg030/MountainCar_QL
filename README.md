@@ -98,7 +98,7 @@ Diese hat sich bereits bei einer Implementierung erwiesen
 
 #### Optimierung mit Q-Learning
 
-Jetzt wissen wir nach welcher Regel in jedem Step die nächste Aktion gewählt wird. Als nächstes muss die Bellman Equation erfüllt werden. Denn die besagt, dass die Policy (NN) optimal werden muss, also Action-Values ausgibt die den Reward und auch zukünftigen States (mit einen Rauschen Gamma) bis zum Erfolg, entsprechen. Ist dies gegeben wird zu jedem State das auswählen der Aktion mit maximalen Value schließlich zum Erfolg also dem höchst möglichen Reward führen, was in unseren Fall der Gipfel ist.
+Jetzt wissen wir nach welcher Regel in jedem Step die nächste Aktion gewählt wird. Als nächstes muss die Bellman Equation erfüllt werden. Denn die besagt, dass die Policy (NN) optimal werden muss, also Action-Values ausgibt die den jetztigen Reward addiert mit maximalen Value des nächsten States (mit einen Rauschen Gamma), entsprechen. Ist dies gegeben wird zu jedem State das auswählen der Aktion mit maximalen Value schließlich zum Erfolg also dem höchst möglichen Reward führen, was in unseren Fall der Gipfel ist.
 <br>
 ![screenshot](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/BellmanEquation.png)
 <br>
@@ -127,3 +127,8 @@ def optimize(Q_0):
     optimizer.step()
 
 ```
+Durch Q-Learning entsteht eine sehr hohe korrelation zwischen den aufeinanderfolgenden Aktionen, dies führt zu einen ineffizienten lernen. Der Gegenwärtige State bestimmt hierbei den nächsten wenn wir immer den maximalen Value folgen. Ist bei einen nicht optimalen Netzwerk die maximale Aktion immer "nichts tun", was dazu führen kann das man in einen schlechten Feedback Schleife hängenbleibt (Bad Feedback Loop).
+
+#### Experience Replay
+Experience Replay (ER) ist eine Erweiterung des Q-Learnings. Hierbei wird wie vorher auch die Aktion mit Epsilon-Greedy gewählt. Allerdings wird die Experience also die Erfahrung (State, Action, Reward, State +1) in jedem Schritt gespeichert. Das heißt, für gegebenen State gewählte Action erhält man den Reward und den nächsten State, welche in einen Replay Memory gespeichert werden. 
+
