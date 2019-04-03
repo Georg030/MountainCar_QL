@@ -124,7 +124,7 @@ for run in trange(RUNS):
 
         # Rewardfunction:
         # get reward based on car position
-        reward = state_1[0] + 0.5
+        reward = state_1[0]
         # increase reward for task completion
         if state_1[0] >= 0.5:
             reward += 1
