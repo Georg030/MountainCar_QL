@@ -13,7 +13,7 @@ from ReplayMemory import ReplayMemory
 
 
 
-def optimize(Q_0):
+def optimize():
     # get action-value function for state + 1
     Q_1 = p_network(Variable(torch.from_numpy(state_1).type(torch.FloatTensor)))
     # take action with max Value of Q_1
@@ -22,7 +22,7 @@ def optimize(Q_0):
     # Q-Target as copy of Q_O (Q_0 is the action value function of state 0)
     target_Q = Variable(Q_0.clone())
 
-    #change max value action to satisfy Bellman Equation
+    #change taken value of taken action(chosen by epsilon-greedy) to satisfy Bellman Equation
     # -> Muliply the highest Action Value of Q_1 with Gamma and add received reward for current state
     target_Q[action] = reward + torch.mul(maxQ_1.detach(), GAMMA)
 
@@ -38,25 +38,25 @@ def optimize(Q_0):
 
 def optimize_with_ER():
     if len(R_MEMORY) > BATCH_SIZE:
+        # takes batch from Memory
         transitions = R_MEMORY.sample(BATCH_SIZE)
         batch = R_MEMORY.Transition(*zip(*transitions))
-
         states_0 = torch.stack(batch.state)
         actions_0 = torch.tensor(batch.action).view(BATCH_SIZE, 1)
         rewards = torch.tensor(batch.reward)
         states_1 = torch.tensor(batch.next_state)
 
-        #print("states one", states_1.shape, "states new",  torch.tensor(batch.next_state).shape)
-        # action-values for the states_0
-        # was passiert bei q_0genau?? -> wegen random action nicht immer maximum
+        # get max Q-Values according to taken actions(with epsilon-greedy)
         max_Qs_0 = p_network(states_0.float()).gather(1, actions_0)
+        # get max Q-Values from next state + 1 from from target-network
         max_Qs_1 = target_network(states_1.float()).max(1)[0]
 
         # Compute the expected Q values
         target_Qs = rewards + (max_Qs_1 * GAMMA)
-        # loss = loss_function(max_Qs_0, target_Qs.unsqueeze(1))
+        # calculate loss
         loss = loss_function(max_Qs_0, target_Qs.unsqueeze(1))
 
+        #otimize network with brackpropagation
         p_network.zero_grad()
         loss.backward()
         optimizer.step()
@@ -64,15 +64,14 @@ def optimize_with_ER():
 
 
 env = gym.make('MountainCar-v0').env
-# for better reproducing, should work without
+# for better reproducing
 env.seed(1)
 np.random.seed(1)
 torch.manual_seed(1)
 
-
 UPDATE_TARGET_N = 10
 BATCH_SIZE = 128
-RUNS = 1000
+RUNS = 1500
 STEPS = 500
 R_MEMORY = ReplayMemory(10000)
 MIN_EPSILON = 0.04
@@ -80,10 +79,7 @@ successes = 0
 GAMMA = 0.99
 epsilon = 0.4
 l_r = 0.001
-
 state_0 = env.reset
-
-position = []
 
 
 p_network = NN()
@@ -97,21 +93,24 @@ optimizer = optim.SGD(p_network.parameters(), lr=l_r)
 scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.9)
 
 steps_history = []
-last_nrsteps = 0
-run_durations = []
+
 
 
 # turn Experience Replay here on or off
 #######################################
-Experience_Replay = False ##############
+Experience_Replay = True ##############
 #######################################
 
 for run in trange(RUNS):
     state_0 = env.reset()
 
     for step in range(STEPS):
+        # if (run % 100 == 0):
+        #     env.render()
+
         # get action-value function of state_0
         Q_0 = p_network(Variable(torch.from_numpy(state_0).type(torch.FloatTensor)))
+
 
         # epsilon probability of choosing a random action
         if np.random.rand(1) < epsilon:
@@ -135,7 +134,7 @@ for run in trange(RUNS):
             R_MEMORY.push(torch.tensor(state_0), action, reward, state_1)
             optimize_with_ER()
 
-        else: optimize(Q_0)
+        else: optimize()
 
         if done or step + 1 == STEPS:
             # if successful
@@ -147,7 +146,7 @@ for run in trange(RUNS):
                 # Adjust learning rate
                 scheduler.step()
             # gather history
-            position.append(state_1[0])
+
             steps_history.append(step + 1)
             break
         else:
@@ -164,39 +163,24 @@ for run in trange(RUNS):
 
 
 
-
-
-
 print("average steps for last 200 runs",np.sum(steps_history[-200:])/200)
 print("average steps for last 400 runs",np.sum(steps_history[-400:])/400)
 env.close()
 
-# plt.figure(2, figsize=[10,5])
-# p = pd.Series(position)
-# ma = p.rolling(10).mean()
-# plt.plot(p, alpha=0.8)
-# plt.plot(ma)
-# plt.xlabel('Run')
-# plt.ylabel('Position')
-# plt.title('Car Final Position')
-# plt.savefig('Final Position - Modified.png')
-# plt.show()
 
 
 
 plt.figure(2, figsize=[10,5])
 p = pd.Series(steps_history)
 ma = p.rolling(100).mean()
-plt.plot(p, alpha=0.8)
+plt.plot(p, alpha=0.9)
 plt.plot(ma)
+plt.text(100, 1, ("Average last 200 Runs: " , np.sum(steps_history[-200:])/200), horizontalalignment='center')
+plt.text(600,1, ("Average last 400 - 200 Runs: " , np.sum(steps_history[-400:-200])/200), horizontalalignment='center')
+plt.text(800,1, ("Successfull Runs in %: " , successes / RUNS * 100), horizontalalignment='center')
 plt.xlabel('Runs')
 plt.ylabel('steps taken')
-plt.title('Car Final Position')
-plt.savefig('Final Position - Modified.png')
+plt.title('Replay Experience')
 plt.show()
 
-#legende zu den Bildern für z.B durchschnit steps usw
-
-
-#225
 

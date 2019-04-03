@@ -14,8 +14,8 @@ class NN (nn.Module):
         self.fc2 = nn.Linear(self.hidden1, self.actions_size, bias=False)
 
         #xavier weight initialisation: worse performance with optimal reward function
-        # torch.nn.init.xavier_uniform(self.fc1.weight)
-        # torch.nn.init.xavier_uniform(self.fc2.weight)
+        #torch.nn.init.xavier_uniform(self.fc1.weight)
+        #torch.nn.init.xavier_uniform(self.fc2.weight)
 
 
     def forward (self, input):

@@ -11,7 +11,6 @@ class ReplayMemory(object):
                                      ('state', 'action', 'reward', 'next_state'))
         self.position = 0
 
-
     def sample(self, batch_size):
         return random.sample(self.memory, batch_size)
 
@@ -20,6 +19,7 @@ class ReplayMemory(object):
         if len(self.memory) < self.size:
             self.memory.append(None)
         self.memory[self.position] = self.Transition(*args)
+        # overwrites old transitions if memory is full
         self.position = (self.position + 1) % self.size
 
 
