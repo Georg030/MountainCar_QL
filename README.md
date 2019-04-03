@@ -1,14 +1,14 @@
 
 ## Problemstellung - MountainCar
 MountainCar ist ein Reinforcement Learning Problem, welches in der PhD Thesis von Andrew Moore entstanden ist.
-Die Lösung des Problems ist simpel: Ein Auto muss von einen Tal aus einen Hügel hinnauffahren.
+Das Problem ist simpel: Ein Auto muss von einen Tal aus einen Hügel hinnauffahren.
 Da Schwerkraft auf das Auto wirkt und der Motor des Fahrzeugs eine zu geringe Kraft aufbringt, kann das Fahrzeug allerdings nicht einfach den Hang hinauf beschleunigen.
 Das Auto muss also lernen Schwung zu gewinnen, indem es Richtung des gegenüber liegenden Hüges fährt bevor es das Ziel erreichen kann.
 <br>
 
 Das Toolkit Gym stellt für die Bearbeitung des Problems eine Environment bereit. (https://github.com/openai/gym/wiki/MountainCar-v0)
-Das Fahrzeug hat drei mögliche Aktionen: Nach rechts fahren, nach links oder nichts machen.
-Die Umgebung führ die Aktion aus und gibt als Beobachtungswerte die Position und die Geschwindigkeit aus, als auch einen Reward.
+Das Fahrzeug hat drei mögliche Aktionen: Nach rechts fahren, nach links fahren oder nichts machen.
+Die Umgebung führt die Aktion aus und gibt Position und die Geschwindigkeit des Autos als Beobachtungswerte, sowie einen einen Reward, aus.
 Als Reward wird nach jeder Aktion -1 zurückgegeben wenn der Gipfel bei Position 0.5 nicht erreicht wurde, 
 wird er erreicht ist der Reward 1. Für meine Lösung habe ich allerdings eine andere Rewardfunktion gewählt, dazu später mehr.
 <br>
@@ -26,15 +26,15 @@ Die Action-Value Funktion oder auch Q(a,s) gibt hierbei einen Q-Value aus,
 welcher dem Value/Reward einer durchgeführten Aktion entpricht 
 Die Policy ist hierbei ein Neuronales Netz, dessen Weights trainiert werden, um bei resultierenden States als Input die optimalen Q(a,s), bzw. die Aktionen mit maximalen Q-Values als Output zu erhalten. 
 <br>
-Für die Lösung des MountainCar Problems werde ich das Q-Learning mittels der Implementierung der Bellman Equation umsetzen. Anschließend will ich Experience Replay als Q-Learning Erweiterung implementieren und das standart Q-Learning, mit dem mit Experience Replay erweiterten, gegenüberstellen. Es kann sich jetzt natürlich die Frage stellen was Bellman Equation und Experience Replay bedeuten, dazu werde ich bei der Implementierung genauer eingehen.
+Für die Lösung des MountainCar Problems werde ich das Q-Learning mittels der Implementierung der Bellman Equation umsetzen. Anschließend will ich Experience Replay als Q-Learning Erweiterung implementieren und das standart Q-Learning, mit dem mit Experience Replay erweiterten, gegenüberstellen. Es kann sich jetzt natürlich die Frage stellen was Bellman Equation und Experience Replay beudeuten, darauf werde ich bei der Implementierung genauer eingehen.
 
 
 ## Implementierung
-Für die Implementierung habe ich PyToworse performance with optimal reward functionrch genutzt, eine Open-Source Machine Learning Bibliothek für Python.
+Für die Implementierung habe ich PyTorch genutzt, eine Open-Source Machine Learning Bibliothek für Python.
 Kern der Fragestellung ist die Implementierung von Q-Learning und der Erweiterung mit Replay Experience. Hpyerparameter- und Netzwerktuning habe ich nur bis zu dem Punkt vorgenommen, bei dem beide Implementierungen unter gleichen Bedingungen funktionieren. Da das Tuning nicht Schwerpunkt dieser Arbeit ist werde ich wenn nur geringfügig darauf eingehen.
 
 #### Netzwerk
-Das Netzwerk ist ein einfaches Fully-Connected Network mit einen einzigen Hiddenlayer mit 100 Neuronen. Es gibt zwei Input Neuronen für die Observierbaren States (Position/Velocity) und drei Output Neuronen für die möglichen Aktionen (links, nichts tun,rechts). 
+Das Netzwerk ist ein einfaches Fully-Connected Network mit einen einzigen Hiddenlayer mit 100 Neuronen. Es gibt zwei Input Neuronen für die oberservierten States (Position/Velocity) und drei Output Neuronen für die möglichen Aktionen (links, nichts tun, rechts). 
 Die weights sind mit der Default Standartverteilung von Torch initialisiert. Ich habe auch eine Initialisierung mit Xavier getestet, durch diese hat das Netzwerk zwar früher konvergiert aber final schlechtere Resultate erziehlt.
 ```python
 class NN (nn.Module):
@@ -63,7 +63,7 @@ class NN (nn.Module):
 
 #### Interaktion mit der Environment
 
-Die Interaktion mit der Environment stellt sich Episodisch dar. Wobei eine Episode in meiner Implementation aus Maximal 500 Schritten/Steps besteht. Die Environment wird resettet wenn es das Fahrzeug zum Ziel schafft oder die 500 Steps erreicht wurden, was dazu führt das das Fahrzeug wieder auf die Startposition zurückkehrt und die nächste Episode/Run beginnt. Jeder Schritt beginnt mit der Obversvation der Environment, man erhält also den aktuellen Status mit Position. Die Policy also das Netzwerk bekommt den State als Input und gibt daraufhin eine Q-Value Funktion(Q_0) zurück, ein Array mit drei Werten die die Values der drei möglichen Aktionen sind. Ein logischer Schritt wäre es nun die Aktion zu wählen die den höchsten Value/Reward verspricht(max(Q_0)), was sich auch Exploitation also Ausbeutung nennt. Da wir aber noch keine optimale Policy haben und die Values nicht den tatsächlichen Rewards entsprechen, ist es notwendig das für die Entdeckung möglicher höherer Rewards ein Teil der Aktionen Zufällig gewählt wird. Dieser Teil nennt sich Exploration (Erkundschaften). Es gibt also ein Abwägen zwischen Exploration und Exploitation welches durch den Parameter Epsilon bestimmt wird. Die Beeinflussung der Exploitation durch Epsilon wird Epsilon-Greedy (Greedy für Gier) genannt. In meiner Implementierung beträgt Epsilon den Wert 0.4 und besagt, dass 40% der Aktionen zufällig gewählt werden also der Exploration dienen. Der Wert von Epsilon sinkt allerdings nach jeder Erfolgreichen Episode. 
+Die Interaktion mit der Environment stellt sich Episodisch dar. Wobei eine Episode in meiner Implementation aus Maximal 500 Schritten/Steps besteht. Die Environment wird resettet wenn es das Fahrzeug zum Ziel schafft oder die 500 Steps erreicht wurden, was dazu führt das das Fahrzeug wieder auf die Startposition zurückkehrt und die nächste Episode/Run beginnt. Jeder Schritt beginnt mit der Obversvation der Environment, man erhält also den aktuellen Status mit Position. Die Policy also das Netzwerk bekommt den State als Input und gibt daraufhin eine Q-Value Funktion(Q_0) zurück, ein Array mit drei Werten die die Values der drei möglichen Aktionen sind. Ein logischer Schritt wäre es nun die Aktion zu wählen die den höchsten Value/Reward verspricht(max(Q_0)), was sich auch Exploitation also Ausbeutung nennt. Da wir aber noch keine optimale Policy haben und die Values nicht den tatsächlichen Rewards entsprechen, ist es notwendig das für die Entdeckung möglicher höherer Values ein Teil der Aktionen Zufällig gewählt wird. Dieser Teil nennt sich Exploration (Erkundschaften). Es gibt also ein Abwägen zwischen Exploration und Exploitation welches durch den Parameter Epsilon bestimmt wird. Die Beeinflussung der Exploitation durch Epsilon wird Epsilon-Greedy (Greedy für Gier) genannt. In meiner Implementierung beträgt Epsilon den Wert 0.4 und besagt, dass 40% der Aktionen zufällig gewählt werden also der Exploration dienen. Der Wert von Epsilon sinkt allerdings nach jeder Erfolgreichen Episode. 
 <br>
 ```python
 for run in trange(RUNS):
@@ -101,7 +101,7 @@ Jetzt wissen wir nach welcher Regel in jedem Step die nächste Aktion gewählt w
 <br>
 ![screenshot](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/BellmanEquation.png)
 <br>
-Denn die besagt, dass die Policy (NN) optimal werden muss, also Action-Values ausgibt die den jetztigen Reward addiert mit maximalen Value des nächsten States (mit einen Rauschen Gamma), entsprechen. Ist dies gegeben wird zu jedem State das auswählen der Aktion mit maximalen Value schließlich zum Erfolg also dem höchst möglichen Reward führen, was in unseren Fall der Gipfel ist.
+Denn die besagt, dass die Policy (NN) optimal werden muss, also Action-Values ausgibt die den jetzigen Reward addiert mit maximalen Value des nächsten States (mit einen Rauschen Gamma), entsprechen. Ist dies gegeben wird zu jedem State das auswählen der Aktion mit maximalen Value schließlich zum Erfolg also dem höchst möglichen Reward führen, was in unseren Fall der Gipfel ist.
 
 
 
@@ -133,8 +133,8 @@ def optimize(Q_0):
 Durch Q-Learning entsteht eine sehr hohe korrelation der aufeinanderfolgenden Aktionen, dies führt zu einen ineffizienten lernen. Der Gegenwärtige State bestimmt hierbei den nächsten wenn wir immer den maximalen Value folgen. Ist bei einen nicht optimalen Netzwerk die maximale Aktion immer "nichts tun", was dazu führen kann das man in einen schlechten Feedback Schleife hängenbleibt (Bad Feedback Loop).
 
 ### Experience Replay
-Experience Replay (ER) ist eine Erweiterung des Q-Learnings. Hierbei wird wie vorher auch die Aktion mit Epsilon-Greedy gewählt. Allerdings wird die Experience also die Erfahrung/Experience (State, Action, Reward, State +1) in jedem Schritt gespeichert. Das heißt, für gegebenen State gewählte Action erhält man den Reward und den nächsten State, welche in einen Replay Memory gespeichert werden. 
-Um die Policy zu trainieren wird bei jedem Schritt ein Batch (hier Größe von 128)  einer zufälligen Teilmenge aus dem Replay Memory genommen. Nun berechnet man für jede Experience wie vorher das Q-Target und den Loss zwischen Q-Target und Q-0. Anzumerken ist, dass es diesmal zwei Netwerke gibt. Zusätzlich zu dem Policy-Netzwerk gibt es ein Target-Netzwerk, welches den Q-Value des States + 1 berechnet. Das Target-Netz ist eingefrohren und übernimmt in Abstand von mehreren Schritten (hier 10) die Weights des Policy-Netzwerks. Dies gibt den Algroithmus eine höhere Stabilität. 
+Experience Replay (ER) ist eine Erweiterung des Q-Learnings. Hierbei wird wie vorher auch die Aktion mit Epsilon-Greedy gewählt. Allerdings wird die Experience in form einer Transition(State, Action, Reward, State +1) in jedem Schritt gespeichert.  
+Um die Policy zu trainieren wird bei jedem Schritt ein Batch (hier Größe von 128) einer zufälligen Teilmenge aus dem Replay Memory genommen. Nun berechnet man für jede Experience wie vorher das Q-Target und den Loss zwischen Q-Target und Q-0. Anzumerken ist, dass es diesmal zwei Netzwerke gibt. Zusätzlich zu dem Policy-Netzwerk gibt es ein Target-Netzwerk, welches den Q-Value des States + 1 berechnet. Das Target-Netz ist eingefroren und übernimmt in Abstand von mehreren Schritten (hier 10) die Weights des Policy-Netzwerks. Dies gibt den Algorithmus eine höhere Stabilität. 
 ```python
 def optimize_with_ER():
     if len(R_MEMORY) > BATCH_SIZE:
@@ -162,7 +162,7 @@ def optimize_with_ER():
         optimizer.step()
 ```
 ### Vorteile von Experience Replay 
-Das lernen von aufeinanderfolgenden Aktionen ist durch die hohe Horrelation problematisch und führt zu einen uneffizienten Lernen. Außerdem können dabei, die bereits erwähnten, "Bad Feedback Loops" entstehen. 
+Das lernen von aufeinanderfolgenden Aktionen ist durch die hohe Korrelation problematisch und führt zu einen uneffizienten Lernen. Außerdem können dabei, die bereits erwähnten, "Bad Feedback Loops" entstehen. 
 <br>
 Indem die Erfahrungen beibehalten werden verhindern wir, dass das Netzwerk nur davon lernt, was es unmittelbar in der Umgebung tut. Es ermöglicht von einer Array von Erfahrungen zu lernen und dies bei jedem Schritt, wohingegen das standart Q-Learning nur von einer Aktion lernt. Experience Replay ist deshalb effizienter als das Einfache Q-Learning und kann auch mit weniger oder sich wiederholenden Daten besser Lernen. Die Gefahr von Bad Feedback Loops wird Aufgrund der geringen Korrelation der Erfahrungen verringert. Experience Replay führt ausserdem zu einer besseren Konvergenz und erziehlt daher bessere Ergebnisse. 
 
