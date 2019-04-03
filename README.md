@@ -167,11 +167,14 @@ Das lernen von aufeinanderfolgenden Aktionen ist durch die hohe Korrelation prob
 Indem die Erfahrungen beibehalten werden verhindern wir, dass das Netzwerk nur davon lernt, was es unmittelbar in der Umgebung tut. Es ermöglicht von einer Array von Erfahrungen zu lernen und dies bei jedem Schritt, wohingegen das standart Q-Learning nur von einer Aktion lernt. Experience Replay ist deshalb effizienter als das Einfache Q-Learning und kann auch mit weniger oder sich wiederholenden Daten besser Lernen. Die Gefahr von Bad Feedback Loops wird Aufgrund der geringen Korrelation der Erfahrungen verringert. Experience Replay führt ausserdem zu einer besseren Konvergenz und erziehlt daher bessere Ergebnisse. 
 
 ## Ergebnis
-
-Anhand der Grafiken lässt sich erkennen, dass das Q-Learning mit Replay Experience wesentlich bessere Ergebnisse erziehlt. Die gennanten Vorteile scheinen sich in den Ergebnissen wieder zu spiegeln. 
+Bei des Basic Implementation zeigt sich dass auch das gelernte Modell noch häufig das Ziel nicht in 500 Schritten erreicht. Auch verbessert sich die die durchschnittliche Anzahl an benötigten Schritten nicht mehr. 
 <br>
 ![alt text](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/Basic.png)  
+<br>
 
+<br>
+Die Implementation des Replay Memories liefert leider momentan keine guten Ergebnisse.
+Ich konnte mit dem Replay Memorie allerdings verlässlich weit bessere Ergebnisse erzielen. Diese hatten eine durchschnittliche benötigte Schrittzahl von 140 und wiesen keine Misserfolge in den letzten 400 Episoden auf. Leider kann ich dieses Ergebnis momentan aus mir nicht erklärlichen Gründen nicht nachproduzieren. Wenn möglich werde ich es nachreichen.
 
 
 
