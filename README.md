@@ -27,7 +27,7 @@ Die Action-Value Funktion oder auch Q(a,s) gibt hierbei einen Q-Value aus,
 welcher dem Value/Reward einer durchgeführten Aktion entpricht 
 Die Policy ist hierbei ein Neuronales Netz, dessen Weights trainiert werden, um bei resultierenden States als Input die optimalen Q(a,s), bzw. die Aktionen mit maximalen Q-Values als Output zu erhalten. 
 <br>
-Für die Lösung des MountainCar Problems werde ich das Q-Learning mittels der Implementierung der Bellmann Equation umsetzen. Anschließend will ich Experience Replay als Q-Learning Erweiterung implementieren und das standart Q-Learning, mit dem mit Experience Replay erweiterten, gegenüberstellen. Es stellen sich jetzt natürlich die Fragen was Bellmann Equation und Experience Replay beudeuten, dazu werde ich bei der Implementierung genauer eingehen.
+Für die Lösung des MountainCar Problems werde ich das Q-Learning mittels der Implementierung der Bellman Equation umsetzen. Anschließend will ich Experience Replay als Q-Learning Erweiterung implementieren und das standart Q-Learning, mit dem mit Experience Replay erweiterten, gegenüberstellen. Es kann sich jetzt natürlich die Frage stellen was Bellman Equation und Experience Replay bedeuten, dazu werde ich bei der Implementierung genauer eingehen.
 
 
 ## Implementierung
@@ -98,10 +98,14 @@ Diese hat sich bereits bei einer Implementierung erwiesen
 
 #### Optimierung mit Q-Learning
 
-Jetzt wissen wir nach welcher Regel in jedem Step die nächste Aktion gewählt wird. Als nächstes muss die Bellman Equation erfüllt werden. Denn die besagt, dass die Policy (NN) optimal werden muss, also Action-Values ausgibt die den jetztigen Reward addiert mit maximalen Value des nächsten States (mit einen Rauschen Gamma), entsprechen. Ist dies gegeben wird zu jedem State das auswählen der Aktion mit maximalen Value schließlich zum Erfolg also dem höchst möglichen Reward führen, was in unseren Fall der Gipfel ist.
+Jetzt wissen wir nach welcher Regel in jedem Step die nächste Aktion gewählt wird. Als nächstes muss die Bellman Equation erfüllt werden.
 <br>
 ![screenshot](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/BellmanEquation.png)
 <br>
+Denn die besagt, dass die Policy (NN) optimal werden muss, also Action-Values ausgibt die den jetztigen Reward addiert mit maximalen Value des nächsten States (mit einen Rauschen Gamma), entsprechen. Ist dies gegeben wird zu jedem State das auswählen der Aktion mit maximalen Value schließlich zum Erfolg also dem höchst möglichen Reward führen, was in unseren Fall der Gipfel ist.
+
+
+
 Die Umsetzung lässt sich einfacher Anhand meiner Implementierung und Kommentare nachvollziehen:
 ```python
 def optimize(Q_0):
