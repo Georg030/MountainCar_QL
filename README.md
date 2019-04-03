@@ -131,7 +131,7 @@ def optimize(Q_0):
     optimizer.step()
 
 ```
-Durch Q-Learning entsteht eine sehr hohe korrelation zwischen den aufeinanderfolgenden Aktionen, dies führt zu einen ineffizienten lernen. Der Gegenwärtige State bestimmt hierbei den nächsten wenn wir immer den maximalen Value folgen. Ist bei einen nicht optimalen Netzwerk die maximale Aktion immer "nichts tun", was dazu führen kann das man in einen schlechten Feedback Schleife hängenbleibt (Bad Feedback Loop).
+Durch Q-Learning entsteht eine sehr hohe korrelation der aufeinanderfolgenden Aktionen, dies führt zu einen ineffizienten lernen. Der Gegenwärtige State bestimmt hierbei den nächsten wenn wir immer den maximalen Value folgen. Ist bei einen nicht optimalen Netzwerk die maximale Aktion immer "nichts tun", was dazu führen kann das man in einen schlechten Feedback Schleife hängenbleibt (Bad Feedback Loop).
 
 #### Experience Replay
 Experience Replay (ER) ist eine Erweiterung des Q-Learnings. Hierbei wird wie vorher auch die Aktion mit Epsilon-Greedy gewählt. Allerdings wird die Experience also die Erfahrung/Experience (State, Action, Reward, State +1) in jedem Schritt gespeichert. Das heißt, für gegebenen State gewählte Action erhält man den Reward und den nächsten State, welche in einen Replay Memory gespeichert werden. 
@@ -147,8 +147,7 @@ def optimize_with_ER():
         rewards = torch.tensor(batch.reward)
         states_1 = torch.tensor(batch.next_state)
 
-        # action-values for the states_0
-        # get Q-Values according to taken actions
+        # get Q-Values according to taken actions(with epsilon-greedy)
         max_Qs_0 = p_network(states_0.float()).gather(1, actions_0)
         # get Q-Values from next state + 1 from from target-network
         max_Qs_1 = target_network(states_1.float()).max(1)[0]
@@ -162,5 +161,15 @@ def optimize_with_ER():
         p_network.zero_grad()
         loss.backward()
         optimizer.step()
-
 ```
+## Vorteile von Experience Replay 
+Das lernen von aufeinanderfolgenden Aktionen ist durch die hohe Horrelation problematisch und führt zu einen uneffizienten Lernen. Außerdem können dabei, die bereits erwähnten, "Bad Feedback Loops" entstehen. 
+<br>
+Indem die Erfahrungen beibehalten werden verhindern wir, dass das Netzwerk nur davon lernt, was es unmittelbar in der Umgebung tut. Es ermöglicht von einer Array von Erfahrungen zu lernen und dies bei jedem Schritt, wohingegen das standart Q-Learning nur von einer Aktion lernt. Experience Replay ist deshalb effizienter als das Einfache Q-Learning und kann auch mit weniger oder sich wiederholenden Daten besser Lernen. Die Gefahr von Bad Feedback Loops wird Aufgrund der geringen Korrelation der Erfahrungen verringert. Experience Replay führt ausserdem zu einer besseren Konvergenz und erziehlt daher bessere Ergebnisse. 
+
+
+
+
+
+
+
