@@ -11,8 +11,6 @@ from tqdm import tqdm, trange
 from NN import NN
 from ReplayMemory import ReplayMemory
 
-
-
 def optimize():
     # get action-value function for state + 1
     Q_1 = p_network(Variable(torch.from_numpy(state_1).type(torch.FloatTensor)))
@@ -98,15 +96,15 @@ steps_history = []
 
 # turn Experience Replay here on or off
 #######################################
-Experience_Replay = True ##############
+Experience_Replay = False ##############
 #######################################
 
 for run in trange(RUNS):
     state_0 = env.reset()
 
     for step in range(STEPS):
-        # if (run % 100 == 0):
-        #     env.render()
+        if (run % 50 == 0):
+              env.render()
 
         # get action-value function of state_0
         Q_0 = p_network(Variable(torch.from_numpy(state_0).type(torch.FloatTensor)))
@@ -124,7 +122,7 @@ for run in trange(RUNS):
 
         # Rewardfunction:
         # get reward based on car position
-        reward = state_1[0]
+        reward = state_1[0] +0.5
         # increase reward for task completion
         if state_1[0] >= 0.5:
             reward += 1
@@ -142,7 +140,7 @@ for run in trange(RUNS):
                 successes += 1
                 # Adjust epsilon
                 if epsilon >= MIN_EPSILON:
-                    epsilon *= .99
+                    epsilon *= .98
                 # Adjust learning rate
                 scheduler.step()
             # gather history
@@ -175,12 +173,12 @@ p = pd.Series(steps_history)
 ma = p.rolling(100).mean()
 plt.plot(p, alpha=0.9)
 plt.plot(ma)
-plt.text(100, 1, ("Average last 200 Runs: " , np.sum(steps_history[-200:])/200), horizontalalignment='center')
-plt.text(600,1, ("Average last 400 - 200 Runs: " , np.sum(steps_history[-400:-200])/200), horizontalalignment='center')
-plt.text(800,1, ("Successfull Runs in %: " , successes / RUNS * 100), horizontalalignment='center')
+plt.text(50, 1, ("Average last 200 Runs: " , int(np.sum(steps_history[-200:])/200)), horizontalalignment='center')
+plt.text(600,1, ("Average last 400 - 200 Runs: " , int(np.sum(steps_history[-400:-200])/200)), horizontalalignment='center')
+plt.text(1100,1, ("Successfull Runs in %: " , int(successes / RUNS * 100)), horizontalalignment='center')
 plt.xlabel('Runs')
 plt.ylabel('steps taken')
-plt.title('Replay Experience')
+plt.title('Basic Q - Learning')
 plt.show()
 
 

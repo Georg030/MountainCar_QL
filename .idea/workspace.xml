@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/MountainCar.py" line="177" mnemonic="8" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="b6de5b12-3aad-4f0a-9420-babf42754fb7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Final Position - Modified.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/MountainCar.py" beforeDir="false" afterPath="$PROJECT_DIR$/MountainCar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pictures/ERResult.png" beforeDir="false" afterPath="$PROJECT_DIR$/pictures/ERResult.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pictures/RPResult.png" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,34 +36,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MountainCar.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-680">
-              <caret line="80" column="11" lean-forward="true" selection-start-line="80" selection-start-column="11" selection-end-line="80" selection-end-column="11" />
+            <state relative-caret-position="420">
+              <caret line="105" column="19" selection-start-line="105" selection-start-column="19" selection-end-line="105" selection-end-column="19" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ReplayMemory.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="26" column="31" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/NN.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="9" selection-start-line="17" selection-start-column="9" selection-end-line="17" selection-end-column="9" />
-              <folding>
-                <element signature="e#0#12#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -86,8 +69,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1987" />
-    <option name="y" value="25" />
+    <option name="x" value="2425" />
+    <option name="y" value="200" />
     <option name="width" value="917" />
     <option name="height" value="789" />
   </component>
@@ -103,16 +86,6 @@
             <path>
               <item name="MountainCar_QL" type="b2602c69:ProjectViewProjectNode" />
               <item name="MountainCar_QL" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MountainCar_QL" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MountainCar_QL" type="462c0819:PsiDirectoryNode" />
-              <item name="pictures" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MountainCar_QL" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MountainCar_QL" type="462c0819:PsiDirectoryNode" />
-              <item name="venv" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -211,23 +184,23 @@
       <workItem from="1554191460942" duration="7583000" />
       <workItem from="1554231176565" duration="3778000" />
       <workItem from="1554279393164" duration="4880000" />
-      <workItem from="1554312347124" duration="13810000" />
+      <workItem from="1554312347124" duration="23657000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36657000" />
+    <option name="totallyTimeSpent" value="46504000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1987" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23741007" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.08190371" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49943247" visible="true" weight="0.39524838" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49943247" visible="true" weight="0.09287257" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -241,16 +214,16 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" sideWeight="0.94285715" weight="0.4847814" />
+      <window_info active="true" anchor="right" id="SciView" order="3" sideWeight="0.94107145" visible="true" weight="0.5589375" />
       <window_info anchor="right" id="Database" order="4" sideWeight="0.49919224" weight="0.3291714" />
-      <window_info anchor="right" x="0" y="0" width="181" height="853" id="Documentation" order="5" sideWeight="0.057142857" side_tool="true" visible="true" weight="0.23132263" />
+      <window_info anchor="right" x="0" y="0" width="181" height="853" id="Documentation" order="5" sideWeight="0.05892857" side_tool="true" weight="0.078029886" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/MountainCar_QL$MountainCar.coverage" NAME="MountainCar Coverage Results" MODIFIED="1554328516072" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MountainCar_QL$MountainCar.coverage" NAME="MountainCar Coverage Results" MODIFIED="1554365783819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/torch/autograd/__init__.py">
@@ -288,8 +261,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MountainCar.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-680">
-          <caret line="80" column="11" lean-forward="true" selection-start-line="80" selection-start-column="11" selection-end-line="80" selection-end-column="11" />
+        <state relative-caret-position="420">
+          <caret line="105" column="19" selection-start-line="105" selection-start-column="19" selection-end-line="105" selection-end-column="19" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
