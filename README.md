@@ -169,9 +169,9 @@ Indem die Erfahrungen beibehalten werden verhindern wir, dass das Netzwerk nur d
 ## Ergebnis
 Bei des Basic Implementation zeigt sich dass auch das gelernte Modell noch häufig das Ziel nicht in 500 Schritten erreicht. Auch verbessert sich die die durchschnittliche Anzahl an benötigten Schritten nicht mehr. 
 <br>
-![alt text](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/Basic.png)  
+![alt text](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/basicResult.png)  
 <br>
-
+![alt text](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/ERResult.png)  
 <br>
 Die Implementation des Replay Memories liefert leider momentan keine guten Ergebnisse.
 Ich konnte mit dem Replay Memorie allerdings verlässlich weit bessere Ergebnisse erzielen. Diese hatten eine durchschnittliche benötigte Schrittzahl von 140 und wiesen keine Misserfolge in den letzten 400 Episoden auf. Leider kann ich dieses Ergebnis momentan aus mir nicht erklärlichen Gründen nicht nachproduzieren. Wenn möglich werde ich es nachreichen.
