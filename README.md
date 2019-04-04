@@ -167,14 +167,16 @@ Das lernen von aufeinanderfolgenden Aktionen ist durch die hohe Korrelation prob
 Indem die Erfahrungen beibehalten werden verhindern wir, dass das Netzwerk nur davon lernt, was es unmittelbar in der Umgebung tut. Es ermöglicht von einer Array von Erfahrungen zu lernen und dies bei jedem Schritt, wohingegen das standart Q-Learning nur von einer Aktion lernt. Experience Replay ist deshalb effizienter als das Einfache Q-Learning und kann auch mit weniger oder sich wiederholenden Daten besser Lernen. Die Gefahr von Bad Feedback Loops wird Aufgrund der geringen Korrelation der Erfahrungen verringert. Experience Replay führt ausserdem zu einer besseren Konvergenz und erziehlt daher bessere Ergebnisse. 
 
 ## Ergebnis
-Bei des Basic Implementation zeigt sich dass auch das gelernte Modell noch häufig das Ziel nicht in 500 Schritten erreicht. Auch verbessert sich die die durchschnittliche Anzahl an benötigten Schritten nicht mehr. 
+Erklärung zu den Grafiken: Die blauen Linien Zeigen an wieviele Schritte in einer Episode benötigt wurden um das Ziel zu erreichen. Geht die Linie bis zur 500 wurde das Ziel nicht erreicht. Die Organgene Kurve zeigt die durchschnittlichen Schritte der letzten 100 Episoden an. Das Ziel im Durschnitt von 90 Schritten zu erreichen würde ich als Optimum betrachten. 
 <br>
 ![alt text](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/basicResult.png)  
 <br>
+Bei des Basic Implementation zeigt sich dass auch das gelernte Modell noch häufig das Ziel innerhalb der 500 Schritte nicht erreicht und ist damit noch nicht sehr stabil. Dies zeigt sich auch durch die verschlechterung der Erfolgsrate innerhalb der letzten 400 Episoden. Generell ist bei einer durchschnittlichen Erfolgsrate von 182 in den letzten 200 Schritten, das optimum bei weitem verfehlt. 
+<br>
+<br>
 ![alt text](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/ERResult.png)  
 <br>
-Die Implementation des Replay Memories liefert leider momentan keine guten Ergebnisse.
-Ich konnte mit dem Replay Memorie allerdings verlässlich weit bessere Ergebnisse erzielen. Diese hatten eine durchschnittliche benötigte Schrittzahl von 140 und wiesen keine Misserfolge in den letzten 400 Episoden auf. Leider kann ich dieses Ergebnis momentan aus mir nicht erklärlichen Gründen nicht nachproduzieren. Wenn möglich werde ich es nachreichen.
+Die Implementation mit Replay Experience zeigt deutlich bessere Ergebnisse. Das Trainierte Modell erreicht immer das Ziel und ist mit einer durchschnittlichen
 
 
 
