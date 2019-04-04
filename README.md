@@ -26,7 +26,7 @@ Die Action-Value Funktion oder auch Q(a,s) gibt hierbei einen Q-Value aus,
 welcher dem Value/Reward einer durchgeführten Aktion entpricht 
 Die Policy ist hierbei ein Neuronales Netz, dessen Weights trainiert werden, um bei resultierenden States als Input die optimalen Q(a,s), bzw. die Aktionen mit maximalen Q-Values als Output zu erhalten. 
 <br>
-Für die Lösung des MountainCar Problems werde ich das Q-Learning mittels der Implementierung der Bellman Equation umsetzen. Anschließend will ich Experience Replay als Q-Learning Erweiterung implementieren und das standart Q-Learning, mit dem mit Experience Replay erweiterten, gegenüberstellen. Es kann sich jetzt natürlich die Frage stellen was Bellman Equation und Experience Replay beudeuten, darauf werde ich bei der Implementierung genauer eingehen.
+Für die Lösung des MountainCar Problems werde ich das Q-Learning mittels der Implementierung der Bellman Equation umsetzen. Anschließend will ich Experience Replay als Q-Learning Erweiterung implementieren und das standart Q-Learning, mit dem mit Experience Replay erweiterten, gegenüberstellen. Es kann sich jetzt natürlich die Frage stellen was Bellman Equation und Experience Replay bedeuten, darauf werde ich bei der Implementierung genauer eingehen.
 
 
 ## Implementierung
@@ -176,7 +176,7 @@ Bei des Basic Implementation zeigt sich dass auch das gelernte Modell noch häuf
 <br>
 ![alt text](https://raw.githubusercontent.com/georg030/MountainCar_QL/master/pictures/ERResult.png)  
 <br>
-Die Implementation mit Replay Experience zeigt deutlich bessere Ergebnisse. Das Trainierte Modell erreicht immer das Ziel und ist mit einer durchschnittlichen
+Die Implementation mit Replay Experience zeigt deutlich bessere Ergebnisse. Es ist wesentlich stabiler und hat nur in seltenen Fällen Auswüchse. Das Trainierte Modell erreicht immer das Ziel und ist mit einer durchschnittlichen Erfolgsrate von 122 nahe dem Optimum. 
 
 
 
